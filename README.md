@@ -1,35 +1,84 @@
-# Folder Contents
+# Audio and Text Fine-Tuning Project
 
-This folder contains three datasets and three language models (LLMs) related to medical audio transcription. Below is a detailed explanation of each dataset and model.
+This repository contains notebooks for creating datasets, fine-tuning audio transcription models, managing storage during training, and fine-tuning text generation models.
 
-## Datasets
+## Table of Contents
 
-### 1. Audio_Medical3
-- **Description:** Contains 200 rows with columns `Sentence` and `Audio`.
-- **Details:** Sentences were generated using ChatGPT, focusing on the medical domain, varying sentence structures, and including medical terminology to challenge audio transcription models, especially with Indian accents.
-- **Hugging Face Model ID:** [PradyumSomebody/Audio_Medical3](https://huggingface.co/PradyumSomebody/Audio_Medical3)
+- [Notebooks](#notebooks)
+  - [MakaDataset.ipynb](#makadatasetipynb)
+  - [AudioTranscriptionFineTuning.ipynb](#audiotranscriptionfinetuningipynb)
+  - [ClearTrash.ipynb](#cleartrashipynb)
+  - [finetuninText.ipynb](#finetunintextipynb)
+- [Usage Instructions](#usage-instructions)
+- [Contributing](#contributing)
+- [Contact](#contact)
 
-### 2. Audio_Medical4
-- **Description:** Contains 200 rows with columns `Sentence` and `Audio`.
-- **Details:** Similar to Audio_Medical3, these sentences were generated with a focus on medical terminology and challenging transcription in Indian accents.
-- **Hugging Face Model ID:** [PradyumSomebody/Audio_Medical4](https://huggingface.co/PradyumSomebody/Audio_Medical4)
+## Notebooks
 
-### 3. Audio_Medical5
-- **Description:** Contains 50 rows with columns `Sentence` and `Audio`.
-- **Details:** Sentences generated to focus on medical domain and transcription challenges, including medical terms.
-- **Hugging Face Model ID:** [PradyumSomebody/Audio_Medical5](https://huggingface.co/PradyumSomebody/Audio_Medical5)
+### MakaDataset.ipynb
 
-## Models
+This notebook generates a dataset for fine-tuning models. It requires access to a drive containing:
 
-### 1. Whisper-Small
-- **Description:** Base model used for fine-tuning on the above datasets.
+- `dataset.csv`: A CSV file with two columns: `Serial number` and `Sentence`.
+- `AudioFiles` folder: Contains audio files corresponding to the sentences named as `audio1.mp3`, `audio2.mp3`, etc.
 
-### 2. Whisper-Small-HI-Custom4
-- **Description:** Fine-tuned on datasets Audio_Medical3 and Audio_Medical4.
-- **Hugging Face Model ID:** [PradyumSomebody/whisper-small-hi-custom4](https://huggingface.co/PradyumSomebody/whisper-small-hi-custom4)
+### AudioTranscriptionFineTuning.ipynb
 
-### 3. Whisper-Small-HI-Custom5
-- **Description:** Fine-tuned on datasets Audio_Medical3, Audio_Medical4, and Audio_Medical5.
-- **Hugging Face Model ID:** [PradyumSomebody/whisper-small-hi-custom5](https://huggingface.co/PradyumSomebody/whisper-small-hi-custom5)
+This notebook fine-tunes an audio transcription model using the provided audio data. Key points:
+
+- Loads a base audio transcription model and fine-tunes it.
+- Requires the dataset to have `Sentence` and `Audio` columns.
+- Needs access to a drive to store training checkpoints. Only the three latest checkpoints are kept to manage memory usage.
+- It is recommended to run the `ClearTrash.ipynb` notebook alongside to avoid memory clogging.
+
+### ClearTrash.ipynb
+
+This notebook requires drive authentication and clears the trash folder of the drive every 2 minutes. This helps manage storage by ensuring that the deleted checkpoints during training do not fill up the drive space.
+
+### finetuninText.ipynb
+
+This notebook fine-tunes a text generation model on a provided dataset and uploads the fine-tuned model to Hugging Face. Key points:
+
+- The data preparation steps are currently tailored for LLaMA 3 model variants.
+- Parameters for quantization, LoRA, and training arguments can be adjusted based on requirements and available resources.
+- Default settings are optimized for the limited resources of free Colab GPU.
+
+## Usage Instructions
+
+1. **MakaDataset.ipynb**:
+   - Ensure you have a `dataset.csv` file and an `AudioFiles` folder in your drive.
+   - Run the notebook to prepare your dataset.
+
+2. **AudioTranscriptionFineTuning.ipynb**:
+   - Load the notebook and set the base model, dataset, and training arguments.
+   - Authenticate the drive to store checkpoints.
+   - Run the notebook for fine-tuning the model.
+   - Optionally, run the `ClearTrash.ipynb` notebook simultaneously.
+
+3. **ClearTrash.ipynb**:
+   - Authenticate your drive.
+   - Run the notebook to periodically clear the trash folder.
+
+4. **finetuninText.ipynb**:
+   - Load the notebook and set the text generation model, dataset, and training arguments.
+   - Adjust the data processing stage if changing the base model.
+   - Run the notebook to fine-tune the model and upload it to Hugging Face.
+
+## Contributing
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature-branch`)
+3. Commit your changes (`git commit -m 'Add some feature'`)
+4. Push to the branch (`git push origin feature-branch`)
+5. Open a pull request
+
+## Contact
+
+For questions or support, contact:
+
+- **Name**: Pradyum Agarwal
+- **Email**: pradyumagarwal2004@gmail.com
+- **GitHub**: [PradyumSomebody](https://github.com/PradyumSomebody)
+)
 
 For details on the training results and procedures, please refer to the Hugging Face model pages linked above.
